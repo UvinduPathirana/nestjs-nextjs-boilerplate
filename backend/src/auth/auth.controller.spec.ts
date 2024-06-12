@@ -1,18 +1,41 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { AuthController } from './auth.controller';
+import { AuthService } from './auth.service';
+import { INestApplication } from '@nestjs/common';
+import * as request from 'supertest';
 
 describe('AuthController', () => {
-  let controller: AuthController;
+  let app: INestApplication;
+  const authService = { signUp: () => ['test'], signIn: () => ['test'] };
 
-  beforeEach(async () => {
-    const module: TestingModule = await Test.createTestingModule({
+  beforeAll(async () => {
+    const AuthModule: TestingModule = await Test.createTestingModule({
       controllers: [AuthController],
-    }).compile();
+      providers: [AuthService],
+    })
+    .overrideProvider(AuthService)
+    .useValue(authService)
+    .compile();
 
-    controller = module.get<AuthController>(AuthController);
+    app = AuthModule.createNestApplication();
+    await app.init();
   });
 
-  it('should be defined', () => {
-    expect(controller).toBeDefined();
+  it('/POST signup', () => {
+    return request(app.getHttpServer())
+      .post('/auth/signup')
+      .send({username: 'test', password: 'test'})
+      .expect(201);
+  });
+
+  it('/POST signin', () => {
+    return request(app.getHttpServer())
+      .post('/auth/signin')
+      .send({username: 'test', password: 'test'})
+      .expect(201);
+  });
+
+  afterAll(async () => {
+    await app.close();
   });
 });
