@@ -65,5 +65,3 @@ This project is a full-stack weather dashboard application with user authenticat
 
 
 ---
-
-Feel free to customize this template further to fit the specific needs and conventions of your project. Given your experience and achievements, this project will undoubtedly benefit from your expertise in creating high-quality software solutions.
