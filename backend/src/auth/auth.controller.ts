@@ -21,6 +21,8 @@ export class AuthController {
         return this.authService.signIn(authCredentialsDto)
     }
 
+    // This route is there to check if the token validation is working or not
+    // The request should be send with a valid token in the header
     @Post('/test')
     @UseGuards(AuthGuard())
     test(@Req() req){

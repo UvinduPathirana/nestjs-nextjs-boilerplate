@@ -1,41 +1,46 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { AuthController } from './auth.controller';
 import { AuthService } from './auth.service';
-import { INestApplication } from '@nestjs/common';
-import * as request from 'supertest';
+import { AuthCredentialsDto } from './dto/auth-credentials.dto';
+import { UserRepository } from './user.repository';
+import { JwtService } from '@nestjs/jwt';
 
 describe('AuthController', () => {
-  let app: INestApplication;
-  const authService = { signUp: () => ['test'], signIn: () => ['test'] };
+  let authController: AuthController;
+  let authService: AuthService; 
 
-  beforeAll(async () => {
-    const AuthModule: TestingModule = await Test.createTestingModule({
+  beforeEach(async () => {
+    const module: TestingModule = await Test.createTestingModule({
       controllers: [AuthController],
-      providers: [AuthService],
+      providers: [AuthService, JwtService, { provide: UserRepository, useValue: mockDataSource }],
+    }).compile();
+
+
+    authController = module.get<AuthController>(AuthController);
+    authService = module.get<AuthService>(AuthService);
+  })
+
+  const mockDataSource = {
+    // Add methods and properties as required by UserRepository
+    findOne: jest.fn(),
+    createUser: jest.fn(),
+  };
+
+  describe('signUp', () => {
+    it('should successfully sign up a user', async () => {
+      const result = { message: 'User created successfully'};
+      jest.spyOn(authService, 'signUp').mockImplementation(() => Promise.resolve(result));
+
+      expect(await authController.signUp(new AuthCredentialsDto())).toBe(result);
     })
-    .overrideProvider(AuthService)
-    .useValue(authService)
-    .compile();
+  })
 
-    app = AuthModule.createNestApplication();
-    await app.init();
-  });
+  describe('signIn', () => {
+    it('should succesfully sign in a user', async () => {
+      const result = {accessToken: 'token'};
+      jest.spyOn(authService, 'signIn').mockImplementation(() => Promise.resolve(result));
 
-  it('/POST signup', () => {
-    return request(app.getHttpServer())
-      .post('/auth/signup')
-      .send({username: 'test', password: 'test'})
-      .expect(201);
-  });
-
-  it('/POST signin', () => {
-    return request(app.getHttpServer())
-      .post('/auth/signin')
-      .send({username: 'test', password: 'test'})
-      .expect(201);
-  });
-
-  afterAll(async () => {
-    await app.close();
-  });
-});
+      expect(await authController.signIn(new AuthCredentialsDto())).toBe(result);
+    })
+  })
+})
