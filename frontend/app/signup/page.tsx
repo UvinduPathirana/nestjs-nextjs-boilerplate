@@ -13,6 +13,7 @@ import { cn } from "@/lib/utils";
 export default function SignupForm() {
     const emailRef = useRef<HTMLInputElement>(null);
     const passwordRef = useRef<HTMLInputElement>(null);
+    const confirmRef = useRef<HTMLInputElement>(null);
     const [error, setError] = useState<string | null>(null);
     const [success, setSuccess] = useState<string | null>(null);
     const router = useRouter();
@@ -24,6 +25,12 @@ export default function SignupForm() {
 
         const email = emailRef.current ? emailRef.current.value : "";
         const password = passwordRef.current ? passwordRef.current.value : "";
+        const confirmPassword = confirmRef.current ? confirmRef.current.value : "";
+
+        if (password !== confirmPassword) {
+            setError("Passwords do not match!");
+            return;
+        }
 
         try {
             const response = await fetch("/api/auth/signup", {
@@ -66,11 +73,21 @@ export default function SignupForm() {
                     <form onSubmit={handleSubmit} className="grid gap-4">
                         <div className="grid gap-2">
                             <Label htmlFor="email">Email</Label>
-                            <Input id="email" type="email" placeholder="m@example.com" required ref={emailRef} />
+                            <Input id="email" type="email" placeholder="example@example.com" required ref={emailRef} />
                         </div>
                         <div className="grid gap-2">
                             <Label htmlFor="password">Password</Label>
-                            <Input id="password" type="password" required ref={passwordRef} />
+                            <Input name="password" id="password" type="password" required ref={passwordRef} />
+                        </div>
+
+                        <div className="grid gap-2">
+                            <Label htmlFor="password">Confirm Password</Label>
+                            <Input
+                                id="confirmpassword"
+                                name="confirmpassword"
+                                type="password" ref={confirmRef}
+                                required
+                            />
                         </div>
                         {error && (
                             <Alert variant="destructive" className="mt-2">
