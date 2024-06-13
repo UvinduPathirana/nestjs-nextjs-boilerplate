@@ -26,7 +26,7 @@ export class UserRepository extends Repository<User> {
         } catch (error) {
             if(error.code === '23505') {
                 // Duplicate username
-                throw new ConflictException('Username already exists')
+                throw new ConflictException('Email already exists')
             } else {
                 throw new InternalServerErrorException()
             }
