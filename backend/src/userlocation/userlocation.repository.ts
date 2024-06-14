@@ -11,23 +11,18 @@ export class UserLocationRepository extends Repository<UserLocation> {
         super(UserLocation, dataSource.createEntityManager());
     }
 
-    async getUserLoations(user: string): Promise<UserLocation[]> {
-        const query = this.createQueryBuilder('userlocation');
-        query.where({ user });
-        const locations = await query.getMany();
-        return locations;
+    async getUserLocations(user: User): Promise<UserLocation[]> {
+        return this.find({ where: { user } });
     }
 
     // Find if a location already exists
     async findExists(city: string, user: User): Promise<UserLocation> {
-        const query = this.createQueryBuilder('userlocation');
-        city = city.toLowerCase();
-        query.where({ city, user });
-        const location = await query.getOne();
-        return location;
+        // trim white spaces 
+        city = city.trim().toLowerCase();
+        return this.findOne({ where: { city, user } });
     }
 
-    async createUserLocation({ city }: UserLocationDto, user: User): Promise<UserLocation | { message: string }>{
+    async createUserLocation({ city }: UserLocationDto, user: User): Promise<UserLocation>{
         city = city.toLowerCase();
         const found = await this.findExists(city, user);
         if (found) {

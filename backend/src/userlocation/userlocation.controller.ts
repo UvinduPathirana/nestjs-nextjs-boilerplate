@@ -15,7 +15,7 @@ export class UserlocationController {
     async findAll(@Req() request: Request, @GetUser() user: User): Promise<UserLocation[]> {
         // Log the request coming from the frontend
         console.log(request);
-        return this.userlocationService.getLocatoinById(user.id);
+        return this.userlocationService.getLocationById(user);
     }
 
 

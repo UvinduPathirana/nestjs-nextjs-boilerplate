@@ -9,18 +9,14 @@ import { NotFoundException } from '@nestjs/common';
 export class UserlocationService {
     constructor(private userlocationRepository: UserLocationRepository) {}
     
-    async create(userlocation: UserLocationDto, user: User): Promise<UserLocation | { message: string }> {
+    async create(userlocation: UserLocationDto, user: User): Promise<UserLocation> {
         return this.userlocationRepository.createUserLocation(userlocation, user);
     }
-    
-    async findAll(): Promise<UserLocation[]> {
-        return this.userlocationRepository.find();
-    }
 
-    async getLocatoinById(id: string): Promise<UserLocation[]> {
-        const found = await this.userlocationRepository.getUserLoations(id);
+    async getLocationById(user: User): Promise<UserLocation[]> {
+        const found = await this.userlocationRepository.getUserLocations(user);
         if (!found) {
-            throw new NotFoundException(`There are no tasks for this user`);
+            throw new NotFoundException(`There are no locations for this user with ID ${user.id}`);
         }
 
         return found;
@@ -30,7 +26,7 @@ export class UserlocationService {
 
     async deleteLocation(id: number): Promise<{ message: string }> {
         const result = await this.userlocationRepository.delete(id);
-        if (result.affected === 0) {
+        if (result && result.affected === 0) {
             throw new NotFoundException(`Location with ID "${id}" not found`)
         }
         return { message: 'Location deleted successfully'}
