@@ -5,6 +5,7 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { AuthModule } from './auth/auth.module';
 import { UserlocationModule } from './userlocation/userlocation.module';
+import { WeatherapiModule } from './weatherapi/weatherapi.module';
 
 @Module({
   imports: [
@@ -32,7 +33,8 @@ import { UserlocationModule } from './userlocation/userlocation.module';
       inject: [ConfigService],
     }),
     AuthModule,
-    UserlocationModule
+    UserlocationModule,
+    WeatherapiModule
   ],
   controllers: [AppController],
   providers: [AppService],
