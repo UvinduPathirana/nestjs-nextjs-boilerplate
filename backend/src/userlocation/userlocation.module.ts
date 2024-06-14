@@ -1,9 +1,16 @@
 import { Module } from '@nestjs/common';
-import { UserlocationController } from './userlocation.controller';
 import { UserlocationService } from './userlocation.service';
+import { UserlocationController } from './userlocation.controller';
+import { AuthModule } from 'src/auth/auth.module';
+import { TypeOrmModule } from '@nestjs/typeorm';
+import { UserLocation } from './userlocation.entity';
 
 @Module({
-  controllers: [UserlocationController],
-  providers: [UserlocationService]
+  imports: [
+    TypeOrmModule.forFeature([UserLocation]), 
+    AuthModule
+  ],
+  providers: [UserlocationService],
+  controllers: [UserlocationController]
 })
 export class UserlocationModule {}
