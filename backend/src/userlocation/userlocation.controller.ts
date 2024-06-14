@@ -20,7 +20,7 @@ export class UserlocationController {
 
 
     @Post()
-    async create(@Body() userLocation: UserLocationDto, @GetUser() user: User): Promise<UserLocation> {
+    async create(@Body() userLocation: UserLocationDto, @GetUser() user: User): Promise<UserLocation | { message: string }> {
         console.log(user);
         if(!user) {
             throw new Error('User not found');

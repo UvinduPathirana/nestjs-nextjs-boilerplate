@@ -9,7 +9,7 @@ import { NotFoundException } from '@nestjs/common';
 export class UserlocationService {
     constructor(private userlocationRepository: UserLocationRepository) {}
     
-    async create(userlocation: UserLocationDto, user: User): Promise<UserLocation> {
+    async create(userlocation: UserLocationDto, user: User): Promise<UserLocation | { message: string }> {
         return this.userlocationRepository.createUserLocation(userlocation, user);
     }
     
