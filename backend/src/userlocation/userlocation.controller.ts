@@ -30,7 +30,7 @@ export class UserlocationController {
 
     // Delete a location
     @Delete('/:id')
-    async deleteLocation(@Param('id') id: number): Promise<{ message: string }> {
+    async deleteLocation(@Param('id') id: string): Promise<{ message: string }> {
         return this.userlocationService.deleteLocation(id);
     }
 }

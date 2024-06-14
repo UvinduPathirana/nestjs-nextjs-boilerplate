@@ -24,7 +24,7 @@ export class UserlocationService {
 
     // Delete location
 
-    async deleteLocation(id: number): Promise<{ message: string }> {
+    async deleteLocation(id: string): Promise<{ message: string }> {
         const result = await this.userlocationRepository.delete(id);
         if (result && result.affected === 0) {
             throw new NotFoundException(`Location with ID "${id}" not found`)
