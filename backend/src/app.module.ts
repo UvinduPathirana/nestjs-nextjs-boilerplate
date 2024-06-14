@@ -8,7 +8,15 @@ import { UserlocationModule } from './userlocation/userlocation.module';
 
 @Module({
   imports: [
-    ConfigModule.forRoot(),
+    ConfigModule.forRoot({
+      isGlobal: true,
+      envFilePath: '.env',
+      ignoreEnvFile: false,
+      expandVariables: true,
+      validationSchema: undefined,
+      validationOptions: {},
+      cache: false,
+    }),
     TypeOrmModule.forRootAsync({
       imports: [ConfigModule],
       useFactory: async (configService: ConfigService) => ({
