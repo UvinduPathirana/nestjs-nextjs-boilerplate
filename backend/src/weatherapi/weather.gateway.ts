@@ -21,7 +21,7 @@ export class WeatherGateway implements OnGatewayInit, OnGatewayConnection, OnGat
       client.emit('weather', weather);
     } catch (error) {
       this.logger.error(`Failed to get weather for city: ${city}`, error.stack);
-      client.emit('error', 'Failed to get weather data');
+      client.emit('weather', 'Error: Failed to get weather data');
     }
   }
 
@@ -32,7 +32,9 @@ export class WeatherGateway implements OnGatewayInit, OnGatewayConnection, OnGat
   handleConnection(client: Socket, ...args: any[]) {
     this.logger.log(`Client connected: ${client.id}`);
     if(this.city === undefined || this.city === null) {
-      this.city = 'London';
+      // Waiting for the client to send the city
+      client.emit('weather', 'Error: Please send a city name');
+      return;
     }
     
     const intervalId = setInterval(async () => {
@@ -41,7 +43,7 @@ export class WeatherGateway implements OnGatewayInit, OnGatewayConnection, OnGat
         client.emit('weather', weather);
       } catch (error) {
         this.logger.error(`Failed to get weather for city: ${this.city}`, error.stack);
-        client.emit('error', 'Failed to get weather data');
+        client.emit('weather', 'Error: Failed to get weather data');
       }
     }, 90000);
 
