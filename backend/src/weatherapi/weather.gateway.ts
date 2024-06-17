@@ -4,7 +4,7 @@ import { Logger } from '@nestjs/common';
 import { Socket, Server } from 'socket.io';
 import { WeatherapiService } from './weatherapi.service';
 
-@WebSocketGateway({ cors: { origin: 'http://localhost:3000', credentials: true } })
+@WebSocketGateway({ cors: { origin: 'http://localhost:3002', credentials: true } })
 export class WeatherGateway implements OnGatewayInit, OnGatewayConnection, OnGatewayDisconnect {
 
   constructor(private weatherService: WeatherapiService) {}
