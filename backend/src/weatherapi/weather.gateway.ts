@@ -4,7 +4,7 @@ import { Logger } from '@nestjs/common';
 import { Socket, Server } from 'socket.io';
 import { WeatherapiService } from './weatherapi.service';
 
-@WebSocketGateway({ cors: { origin: 'http://localhost:3002', credentials: true } })
+@WebSocketGateway({ cors: { origin: 'http://localhost:3000', credentials: true } })
 export class WeatherGateway implements OnGatewayInit, OnGatewayConnection, OnGatewayDisconnect {
 
   constructor(private weatherService: WeatherapiService) {}
@@ -16,8 +16,13 @@ export class WeatherGateway implements OnGatewayInit, OnGatewayConnection, OnGat
   @SubscribeMessage('city')
   async handleWeatherEvent(client: Socket, city: string): Promise<void> {
     this.city = city;
-    const weather = await this.weatherService.getWeather(city);
-    client.emit('weather', weather);
+    try {
+      const weather = await this.weatherService.getWeather(city);
+      client.emit('weather', weather);
+    } catch (error) {
+      this.logger.error(`Failed to get weather for city: ${city}`, error.stack);
+      client.emit('error', 'Failed to get weather data');
+    }
   }
 
   afterInit(server: Server) {
@@ -26,11 +31,23 @@ export class WeatherGateway implements OnGatewayInit, OnGatewayConnection, OnGat
 
   handleConnection(client: Socket, ...args: any[]) {
     this.logger.log(`Client connected: ${client.id}`);
+    if(this.city === undefined || this.city === null) {
+      this.city = 'London';
+    }
     
-    setInterval(async () => {
-      const weather = await this.weatherService.getWeather(this.city); 
-      client.emit('weather', weather);
+    const intervalId = setInterval(async () => {
+      try {
+        const weather = await this.weatherService.getWeather(this.city);
+        client.emit('weather', weather);
+      } catch (error) {
+        this.logger.error(`Failed to get weather for city: ${this.city}`, error.stack);
+        client.emit('error', 'Failed to get weather data');
+      }
     }, 90000);
+
+    client.on('disconnect', () => {
+      clearInterval(intervalId);
+    });
   }
 
   handleDisconnect(client: Socket) {
