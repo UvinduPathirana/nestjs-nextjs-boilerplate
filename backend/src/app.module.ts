@@ -4,10 +4,20 @@ import { AppService } from './app.service';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { AuthModule } from './auth/auth.module';
+import { UserlocationModule } from './userlocation/userlocation.module';
+import { WeatherapiModule } from './weatherapi/weatherapi.module';
 
 @Module({
   imports: [
-    ConfigModule.forRoot(),
+    ConfigModule.forRoot({
+      isGlobal: true,
+      envFilePath: '.env',
+      ignoreEnvFile: false,
+      expandVariables: true,
+      validationSchema: undefined,
+      validationOptions: {},
+      cache: false,
+    }),
     TypeOrmModule.forRootAsync({
       imports: [ConfigModule],
       useFactory: async (configService: ConfigService) => ({
@@ -22,7 +32,9 @@ import { AuthModule } from './auth/auth.module';
       }),
       inject: [ConfigService],
     }),
-    AuthModule
+    AuthModule,
+    UserlocationModule,
+    WeatherapiModule
   ],
   controllers: [AppController],
   providers: [AppService],

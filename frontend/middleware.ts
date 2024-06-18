@@ -7,7 +7,7 @@ export function middleware(request: NextRequest) {
     return Response.redirect(new URL('/dashboard', request.url))
   }
 
-  if (!currentUser && !request.nextUrl.pathname.startsWith('/signin') && !request.nextUrl.pathname.startsWith('/signup'))  {
+  if (!currentUser && !request.nextUrl.pathname.startsWith('/signin') && !request.nextUrl.pathname.startsWith('/signup') && !request.nextUrl.pathname.startsWith('/reset-password'))   {
     return Response.redirect(new URL('/signin', request.url))
   }
 }
