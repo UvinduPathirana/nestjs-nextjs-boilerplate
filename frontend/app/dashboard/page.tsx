@@ -7,8 +7,6 @@ import GeneralWhetherData from "@/components/dashboard/general-whether-data"
 
 
 export default function DashboardPage() {
-
-
     return (
         <div className="flex min-h-screen w-full flex-col bg-muted/55 pb-5">
 
@@ -16,7 +14,7 @@ export default function DashboardPage() {
             <Card className="p-2 hidden md:block">
                 <h1 className="text-md">2024-06-14 12:24PM</h1>
             </Card>
-            <SearchCity />
+            <SearchCity  />
             <SelectCity />
             <ModeToggle />
             <Profile />

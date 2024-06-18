@@ -98,14 +98,15 @@ export default function ResetPassword() {
                 onChange={handlePasswordChange}
               />
             </div>
-            <br />
-            <ReCAPTCHA
-              ref={recaptchaRef}
-              sitekey="6LeT_vgpAAAAAMPj94VrX5CQv84wNB8Rz1GxOngM"
-              onChange={onChange}
-              asyncScriptOnLoad={asyncScriptOnLoad}
-            />
-            <br />
+            <div className="p-5">
+              <ReCAPTCHA 
+                ref={recaptchaRef}
+                sitekey="6LeT_vgpAAAAAMPj94VrX5CQv84wNB8Rz1GxOngM"
+                onChange={onChange}
+                asyncScriptOnLoad={asyncScriptOnLoad}
+              />
+            </div>
+
             <Button type="submit" className="w-full">
               Next
             </Button>
