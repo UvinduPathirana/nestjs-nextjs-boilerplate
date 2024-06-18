@@ -3,16 +3,20 @@ import { SubscribeMessage, WebSocketGateway, OnGatewayInit, WebSocketServer, OnG
 import { Logger } from '@nestjs/common';
 import { Socket, Server } from 'socket.io';
 import { WeatherapiService } from './weatherapi.service';
+import { UseGuards } from '@nestjs/common';
+import { WsAuthGuard } from './ws-auth.guard';
+import { JwtService } from '@nestjs/jwt';
 
-@WebSocketGateway({ cors: { origin: 'http://localhost:3000', credentials: true } })
+@WebSocketGateway({ cors: { origin: 'http://localhost:3002', credentials: true } })
 export class WeatherGateway implements OnGatewayInit, OnGatewayConnection, OnGatewayDisconnect {
 
-  constructor(private weatherService: WeatherapiService) {}
+  constructor(private weatherService: WeatherapiService, private readonly jwtService: JwtService) {}
 
   @WebSocketServer() server: Server;
   private logger: Logger = new Logger('WeatherGateway');
   private city: string;
 
+  @UseGuards(WsAuthGuard)
   @SubscribeMessage('city')
   async handleWeatherEvent(client: Socket, city: string): Promise<void> {
     this.city = city;
@@ -21,7 +25,7 @@ export class WeatherGateway implements OnGatewayInit, OnGatewayConnection, OnGat
       client.emit('weather', weather);
     } catch (error) {
       this.logger.error(`Failed to get weather for city: ${city}`, error.stack);
-      client.emit('weather', 'Error: Failed to get weather data');
+      client.emit('error', 'Failed to get weather data');
     }
   }
 
@@ -31,25 +35,34 @@ export class WeatherGateway implements OnGatewayInit, OnGatewayConnection, OnGat
 
   handleConnection(client: Socket, ...args: any[]) {
     this.logger.log(`Client connected: ${client.id}`);
-    if(this.city === undefined || this.city === null) {
-      // Waiting for the client to send the city
-      client.emit('weather', 'Error: Please send a city name');
-      return;
-    }
-    
-    const intervalId = setInterval(async () => {
+    console.log(client.handshake.query.token)
+    const token = client.handshake.query?.token as string;
+    if (token) {
       try {
-        const weather = await this.weatherService.getWeather(this.city);
-        client.emit('weather', weather);
+        const isVerified = this.jwtService.verify(token);
+        if (!isVerified) {
+          client.disconnect();
+        } else {
+          const intervalId = setInterval(async () => {
+            try {
+              const weather = await this.weatherService.getWeather(this.city);
+              client.emit('weather', weather);
+            } catch (error) {
+              this.logger.error(`Failed to get weather for city: ${this.city}`, error.stack);
+              client.emit('error', 'Failed to get weather data');
+            }
+          }, 10000);
+          client.on('disconnect', () => {
+            clearInterval(intervalId);
+          });
+        }
       } catch (error) {
-        this.logger.error(`Failed to get weather for city: ${this.city}`, error.stack);
-        client.emit('weather', 'Error: Failed to get weather data');
+        this.logger.error(`Failed to verify token: ${token}`, error.stack);
+        client.disconnect();
       }
-    }, 90000);
-
-    client.on('disconnect', () => {
-      clearInterval(intervalId);
-    });
+    } else {
+      client.disconnect();
+    }
   }
 
   handleDisconnect(client: Socket) {
