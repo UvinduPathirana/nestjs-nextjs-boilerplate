@@ -8,6 +8,7 @@ import { JwtModule } from '@nestjs/jwt';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { User } from './user.entity';
 import { ConfigModule, ConfigService } from '@nestjs/config';
+import { WsAuthGuard } from 'src/weatherapi/ws-auth.guard';
 
 @Module({
   imports: [
@@ -25,7 +26,7 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
     TypeOrmModule.forFeature([User]),
   ],
   controllers: [AuthController],
-  providers: [AuthService, UserRepository, JwtStrategy],
-  exports: [JwtStrategy, PassportModule]
+  providers: [AuthService, UserRepository, JwtStrategy, WsAuthGuard],
+  exports: [JwtStrategy, PassportModule, WsAuthGuard, JwtModule]
 })
 export class AuthModule {}
