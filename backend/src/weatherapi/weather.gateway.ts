@@ -51,7 +51,7 @@ export class WeatherGateway implements OnGatewayInit, OnGatewayConnection, OnGat
               this.logger.error(`Failed to get weather for city: ${this.city}`, error.stack);
               client.emit('error', 'Failed to get weather data');
             }
-          }, 10000);
+          }, 90000);
           client.on('disconnect', () => {
             clearInterval(intervalId);
           });
