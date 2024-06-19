@@ -5,7 +5,7 @@ export async function POST(req: NextRequest) {
         const { email, password } = await req.json();
 
         // Call NestJS backend API to create a user
-        const response = await fetch('http://localhost:3000/auth/signup', {
+        const response = await fetch('http://backend:3000/auth/signup', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
