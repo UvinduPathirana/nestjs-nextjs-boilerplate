@@ -32,7 +32,7 @@ services:
       - ./frontend:/usr/src/app
       - /usr/src/app/node_modules
     environment:
-      NEXT_PUBLIC_API_URL: http://backend:3000
+      - BACKEND_BASE_URL=${BACKEND_BASE_URL}
     depends_on:
       - backend
     command: npm run dev
