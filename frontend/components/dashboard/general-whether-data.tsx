@@ -68,7 +68,7 @@ export default function GeneralWhetherData({ weather }: GeneralWhetherDataProps)
                         opts={{
                             align: "start",
                         }}
-                        className="w-full max-w-md" // Adjust the maximum width here
+                        className="w-full max-w-md" 
                     >
                         <CarouselContent>
                             {hourlyData.map((hour: any, index: number) => (
