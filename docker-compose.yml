@@ -1,0 +1,53 @@
+version: '3.8'
+
+services:
+  backend:
+    build: 
+      context: ./backend
+      dockerfile: Dockerfile
+    ports:
+      - '3000:3000'
+    volumes:
+      - ./backend:/usr/src/app
+      - /usr/src/app/node_modules
+    environment:
+      DB_PASSWORD: '998433'
+      DB_USERNAME: 'postgres'
+      DB_NAME: 'weatherdbcopy'
+      DB_HOST: 'db'
+      DB_PORT: '5432'
+      JWT_SECRET: 'topSecret51'
+      WEATHER_API_KEY: '5c6ee7dfc4fd482d9f1154116240706'
+    depends_on:
+      - db
+    command: yarn start:dev
+
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    ports:
+      - '3002:3002'
+    volumes:
+      - ./frontend:/usr/src/app
+      - /usr/src/app/node_modules
+    environment:
+      NEXT_PUBLIC_API_URL: http://backend:3000
+    depends_on:
+      - backend
+    command: npm run dev
+
+  db:
+    image: postgres:13
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: 998433
+      POSTGRES_DB: weatherdbcopy
+
+
+volumes:
+  postgres_data:
