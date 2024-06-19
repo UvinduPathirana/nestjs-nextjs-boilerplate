@@ -35,7 +35,6 @@ export class WeatherGateway implements OnGatewayInit, OnGatewayConnection, OnGat
 
   handleConnection(client: Socket, ...args: any[]) {
     this.logger.log(`Client connected: ${client.id}`);
-    console.log(client.handshake.query.token)
     const token = client.handshake.query?.token as string;
     if (token) {
       try {
