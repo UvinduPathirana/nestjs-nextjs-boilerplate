@@ -8,7 +8,7 @@ export async function POST(req:
     const { email, password } = await req.json();
     console.log(email, password, "This is the email and password")
     try {
-        const res = await fetch('http://localhost:3000/auth/reset', {
+        const res = await fetch(`${process.env.BACKEND_BASE_URL}/auth/reset`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',

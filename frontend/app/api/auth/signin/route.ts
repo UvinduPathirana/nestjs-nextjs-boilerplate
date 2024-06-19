@@ -6,7 +6,7 @@ export async function POST(req: NextRequest) {
     const { email, password } = await req.json();
 
     // Call NestJS backend API to authenticate the user
-    const response = await fetch('http://localhost:3000/auth/signin', {
+    const response = await fetch(`${process.env.BACKEND_BASE_URL}/auth/signin`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',

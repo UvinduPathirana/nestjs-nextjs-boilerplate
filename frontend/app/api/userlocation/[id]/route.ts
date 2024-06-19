@@ -17,7 +17,7 @@ export async function DELETE(req: Request) {
     }
 
     try {
-        const response = await fetch(`http://localhost:3000/userlocation/${id}`, {
+        const response = await fetch(`${process.env.BACKEND_BASE_URL}/userlocation/${id}`, {
             method: 'DELETE',
             headers: {
                 'Content-Type': 'application/json',
