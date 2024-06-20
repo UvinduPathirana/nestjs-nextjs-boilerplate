@@ -1,0 +1,34 @@
+/* custom-c3.css */
+.c3-axis path,
+.c3-axis line {
+  stroke: var(--c3-axis-line-color);
+}
+
+.c3-axis text {
+  fill: var(--c3-axis-text-color);
+}
+
+.c3-circle {
+  fill: var(--c3-data-mark-color) !important;
+}
+
+.c3-bar {
+  fill: var(--c3-data-mark-color) !important;
+}
+
+.c3-line {
+  stroke: var(--c3-data-mark-color) !important;
+}
+
+/* global.css or component-specific CSS */
+:root {
+  --c3-axis-line-color: black;
+  --c3-axis-text-color: black;
+  --c3-data-mark-color: black;
+}
+
+.dark {
+  --c3-axis-line-color: white;
+  --c3-axis-text-color: white;
+  --c3-data-mark-color: white;
+}

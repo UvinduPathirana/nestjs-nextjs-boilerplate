@@ -31,9 +31,9 @@ export default function GeneralWhetherData({
     url.startsWith("//") ? `https:${url}` : url;
 
   return (
-    <Card className="flex items-center">
+    <Card className="flex flex-col items-center md:flex-row">
       <div className="flex-1 p-6">
-        <div className="flex items-center gap-12">
+        <div className="flex flex-col items-center gap-12 md:flex-row">
           <ThermometerSun size={90} />
           <div className="grid gap-2">
             <div className="flex flex-col">
@@ -71,7 +71,7 @@ export default function GeneralWhetherData({
             opts={{
               align: "start",
             }}
-            className="w-full max-w-6xl"
+            className="w-full max-w-5xl"
           >
             <CarouselContent className="flex flex-nowrap">
               {hourlyData.map((hour: any, index: number) => (
