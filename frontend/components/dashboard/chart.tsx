@@ -3,7 +3,7 @@
 import { useEffect, useRef } from "react";
 import c3 from "c3";
 import "c3/c3.css";
-import "@/styles/custom-c3.css"; 
+import "@/styles/custom-c3.css";
 
 interface TempChartProps {
   data: number[];
@@ -14,6 +14,8 @@ export default function Chart({ data, categories }: TempChartProps) {
   const chartRef = useRef<any>(null);
 
   useEffect(() => {
+    if (!data.length) return;
+
     if (!chartRef.current) {
       chartRef.current = c3.generate({
         bindto: "#chart",
@@ -26,17 +28,17 @@ export default function Chart({ data, categories }: TempChartProps) {
             type: "category",
             categories: categories,
             tick: {
-              outer: false, 
+              outer: false,
             },
           },
           y: {
             tick: {
-              outer: false, 
+              outer: false,
             },
           },
         },
         point: {
-          r: 3, 
+          r: 3,
         },
         resize: {
           auto: true,
@@ -50,10 +52,11 @@ export default function Chart({ data, categories }: TempChartProps) {
     }
   }, [data, categories]);
 
-  // Redraw chart when theme changes
   useEffect(() => {
     const observer = new MutationObserver(() => {
-      chartRef.current.flush(); // Redraw the chart
+      if (chartRef.current) {
+        chartRef.current.flush(); // Redraw the chart
+      }
     });
 
     observer.observe(document.documentElement, {

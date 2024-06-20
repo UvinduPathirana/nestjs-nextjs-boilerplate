@@ -8,6 +8,7 @@ import {
     CardHeader,
     CardTitle,
 } from "@/components/ui/card";
+import { Skeleton } from "@/components/ui/skeleton";
 import { ModeToggle } from "@/components/theme-toggle";
 import SelectCity from "@/components/dashboard/select-city";
 import SearchCity from "@/components/dashboard/add-city-search";
@@ -92,12 +93,14 @@ export default function DashboardPage() {
     return (
         <div className="flex min-h-screen w-full flex-col bg-muted/55 pb-5">
             <header className="sticky p-5 top-0 z-30 flex h-14 items-center gap-4 border-b bg-background px-4 sm:static sm:h-auto sm:border-0 sm:bg-transparent sm:px-6">
-                {weather && weather.location && (
+                {weather && weather.location ? (
                     <Card className="p-2 hidden md:block">
                         <h1 className="text-md">
                             {formatDateTime(weather.location.localtime)}
                         </h1>
                     </Card>
+                ) : (
+                    <Skeleton className="w-[150px] h-[20px]" />
                 )}
                 <SearchCity />
                 <SelectCity
@@ -113,31 +116,33 @@ export default function DashboardPage() {
                 <div className="mx-auto flex-1 gap-4">
                     <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3 lg:gap-8">
                         <div className="col-span-2 grid gap-4 lg:gap-8">
-                            <GeneralWhetherData weather={weather} />
-                            {/* chart */}
+                            <GeneralWhetherData weather={weather} loading={loading} />
+
                             <Card>
                                 <CardHeader>
                                     <CardTitle>Overview</CardTitle>
                                     <CardDescription>
-                                        overview of the whether using charts
+                                        Overview of the weather using charts
                                     </CardDescription>
                                 </CardHeader>
                                 <CardContent>
                                     <div style={{ padding: "0px" }}>
-                                        <Chart data={temperatureData} categories={categories} />
+                                        {loading ? (
+                                            <Skeleton className="w-full h-[300px] rounded-lg" />
+                                        ) : (
+                                            <Chart data={temperatureData} categories={categories} />
+                                        )}
                                     </div>
                                 </CardContent>
-
                             </Card>
                         </div>
 
                         <div className="grid gap-4 lg:gap-8">
-                            <ForecastWeek weather={weather} />
+                            <ForecastWeek weather={weather} loading={loading} />
                         </div>
                     </div>
                 </div>
             </main>
         </div>
-
     );
 }
