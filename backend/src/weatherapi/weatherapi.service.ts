@@ -15,7 +15,7 @@ export class WeatherapiService {
     const params = {
       key: this.configService.get('WEATHER_API_KEY'),
       q: city,
-      days: 7,
+      days: 8,
       aqi: 'no',
       alerts: 'no',
     };

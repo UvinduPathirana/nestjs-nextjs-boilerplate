@@ -8,7 +8,7 @@ import { CookiesProvider } from "next-client-cookies/server";
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
-  title: "Whether Dashboard",
+  title: "Weather Dashboard",
   description: "Real-time weather data dashboard",
 };
 
