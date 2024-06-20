@@ -4,6 +4,7 @@ import { redirect } from 'next/navigation';
 
 export async function POST() {
   cookies().delete('token',);
+  cookies().delete('refreshToken');
   //redirect to signin page 
 
   

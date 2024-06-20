@@ -15,12 +15,18 @@ export class AuthController {
 
     // Signin route
     @Post('/signin')
-    signIn(@Body() authCredentialsDto : AuthCredentialsDto): Promise<{ accessToken: string }> {
+    signIn(@Body() authCredentialsDto : AuthCredentialsDto): Promise<{ accessToken: string, refreshToken: string }> {
         return this.authService.signIn(authCredentialsDto)
     }
 
     @Post('/reset')
     reset(@Body() authCredentialsDto : AuthCredentialsDto): Promise<User> {
         return this.authService.reset(authCredentialsDto)
+    }
+
+    @Post('refreshtoken')
+    async refreshToken(@Body('refreshToken') refreshToken: string): Promise<{ accessToken: string }> {
+        const { accessToken } = await this.authService.refreshTokens(refreshToken);
+        return { accessToken }
     }
 }

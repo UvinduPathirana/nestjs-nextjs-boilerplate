@@ -20,12 +20,10 @@ export async function POST(req: NextRequest) {
     }
     const data = await response.json();
     cookies().set("token", data.accessToken);
+    cookies().set("refreshToken", data.refreshToken)
 
 
     return NextResponse.json({ accessToken: data.accessToken }, { status: 200 });
-
-
-
   } catch (error) {
     return NextResponse.json({ error: 'Internal Server Error' }, { status: 500 });
   }
