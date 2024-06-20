@@ -32,6 +32,30 @@ export class AuthService {
     }
   }
 
+  async refreshTokens(refreshToken: string): Promise<{ accessToken: string }> {
+    try {
+      const payload = this.jwtService.verify(refreshToken);
+      console.log('Decoded refreshToken:', payload.id);
+
+      if (!payload || !payload.id) {
+        throw new UnauthorizedException('Invalid refresh token');
+      }
+
+      // Fetch user from database (if needed)
+      const user = await this.userRepository.findOne({ where: { id: payload.id }});
+      if (!user) {
+        throw new UnauthorizedException('User not found');
+      }
+
+      // Generate new accessToken
+      const accessToken = this.generateAccessToken(user);
+
+      return { accessToken };
+    } catch (error) {
+      throw new UnauthorizedException('Invalid refresh token');
+    }
+  }
+
   async reset(authCredentialsDto: AuthCredentialsDto): Promise<User> {
     const { email, password } = authCredentialsDto;
     const user = await this.userRepository.findOne({ where: { email } });
