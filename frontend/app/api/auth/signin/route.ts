@@ -19,13 +19,12 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ error: errorData.message }, { status: response.status });
     }
     const data = await response.json();
-    cookies().set("token", data.accessToken);
 
+    // Set the access token and refresh token in HttpOnly cookies
+    cookies().set("token", data.accessToken, { httpOnly: true })
+    cookies().set("refreshToken", data.refreshToken, { httpOnly: true });
 
     return NextResponse.json({ accessToken: data.accessToken }, { status: 200 });
-
-
-
   } catch (error) {
     return NextResponse.json({ error: 'Internal Server Error' }, { status: 500 });
   }
