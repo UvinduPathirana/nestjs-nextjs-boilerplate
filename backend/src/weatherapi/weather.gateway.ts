@@ -8,6 +8,7 @@ import { WsAuthGuard } from './ws-auth.guard';
 import { JwtService } from '@nestjs/jwt';
 
 @WebSocketGateway({ cors: { origin: 'http://localhost:3002', credentials: true } })
+@UseGuards(WsAuthGuard)
 export class WeatherGateway implements OnGatewayInit, OnGatewayConnection, OnGatewayDisconnect {
 
   constructor(private weatherService: WeatherapiService, private readonly jwtService: JwtService) {}
@@ -16,7 +17,6 @@ export class WeatherGateway implements OnGatewayInit, OnGatewayConnection, OnGat
   private logger: Logger = new Logger('WeatherGateway');
   private city: string;
 
-  @UseGuards(WsAuthGuard)
   @SubscribeMessage('city')
   async handleWeatherEvent(client: Socket, city: string): Promise<void> {
     this.city = city;
@@ -35,33 +35,18 @@ export class WeatherGateway implements OnGatewayInit, OnGatewayConnection, OnGat
 
   handleConnection(client: Socket, ...args: any[]) {
     this.logger.log(`Client connected: ${client.id}`);
-    const token = client.handshake.query?.token as string;
-    if (token) {
+    const intervalId = setInterval(async () => {
       try {
-        const isVerified = this.jwtService.verify(token);
-        if (!isVerified) {
-          client.disconnect();
-        } else {
-          const intervalId = setInterval(async () => {
-            try {
-              const weather = await this.weatherService.getWeather(this.city);
-              client.emit('weather', weather);
-            } catch (error) {
-              this.logger.error(`Failed to get weather for city: ${this.city}`, error.stack);
-              client.emit('error', 'Failed to get weather data');
-            }
-          }, 90000);
-          client.on('disconnect', () => {
-            clearInterval(intervalId);
-          });
-        }
+        const weather = await this.weatherService.getWeather(this.city);
+        client.emit('weather', weather);
       } catch (error) {
-        this.logger.error(`Failed to verify token: ${token}`, error.stack);
-        client.disconnect();
+        this.logger.error(`Failed to get weather for city: ${this.city}`, error.stack);
+        client.emit('error', 'Failed to get weather data');
       }
-    } else {
-      client.disconnect();
-    }
+    }, 90000);
+    client.on('disconnect', () => {
+      clearInterval(intervalId);
+    });
   }
 
   handleDisconnect(client: Socket) {
