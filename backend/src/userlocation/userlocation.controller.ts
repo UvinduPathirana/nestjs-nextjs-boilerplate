@@ -14,14 +14,12 @@ export class UserlocationController {
     @Get()
     async findAll(@Req() request: Request, @GetUser() user: User): Promise<UserLocation[]> {
         // Log the request coming from the frontend
-        console.log(request);
         return this.userlocationService.getLocationById(user);
     }
 
 
     @Post()
     async create(@Body() userLocation: UserLocationDto, @GetUser() user: User): Promise<UserLocation | { message: string }> {
-        console.log(user);
         if(!user) {
             throw new Error('User not found');
         }

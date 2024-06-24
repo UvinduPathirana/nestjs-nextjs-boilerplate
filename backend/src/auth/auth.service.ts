@@ -35,7 +35,6 @@ export class AuthService {
   async refreshTokens(refreshToken: string): Promise<{ accessToken: string }> {
     try {
       const payload = this.jwtService.verify(refreshToken);
-      console.log('Decoded refreshToken:', payload.id);
 
       if (!payload || !payload.id) {
         throw new UnauthorizedException('Invalid refresh token');

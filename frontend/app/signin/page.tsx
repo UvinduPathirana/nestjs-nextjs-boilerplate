@@ -44,10 +44,6 @@ export default function LoginForm() {
       }
 
       const data = await response.json();
-      //console log the token
-      console.log(data);
-      console.log(data.accessToken);
-
       router.push("/dashboard"); // redirect to dashboard after successful sign-in
     } catch (err: unknown) {
       if (err instanceof Error) {

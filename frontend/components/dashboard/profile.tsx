@@ -1,11 +1,20 @@
 "use client";
 
-import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuTrigger, } from "@/components/ui/dropdown-menu"
-import { Button } from "@/components/ui/button"
-import Image from "next/image"
-import avatarimage from "@/public/avatar.jpg"
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
+import { Button } from "@/components/ui/button";
+import Image from "next/image";
+import avatarimage from "@/public/avatar.jpg";
+import { useRouter } from "next/navigation";
 
 export default function Profile() {
+  const router = useRouter();
 
   function handleLogout() {
     fetch("/api/auth/logout", {
@@ -14,20 +23,17 @@ export default function Profile() {
         "Content-Type": "application/json",
       },
     })
-      .then(response => {
+      .then((response) => {
         if (response.ok) {
-          console.log('Logged out successfully');
-          window.location.href = '/signin';
-        }
-        else {
-          console.error('Failed to log out');
+          router.push("/signin");
+        } else {
+          console.error("Failed to log out");
         }
       })
-      .catch(error => {
-        console.error('An error occurred:', error);
+      .catch((error) => {
+        console.error("An error occurred:", error);
       });
   }
-
 
   return (
     <DropdownMenu>

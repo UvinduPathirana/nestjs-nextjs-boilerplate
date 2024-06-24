@@ -26,6 +26,7 @@ import {
 import AddCityDialog from "@/components/dashboard/required-city-dialog";
 import { useCookies } from "next-client-cookies";
 import { revalidatePath } from "next/cache";
+import { redirect } from "next/navigation";
 
 type City = {
   id: string;
@@ -51,7 +52,6 @@ export default function SelectCity({
 
   async function refreshToken() {
     const refreshToken = cookies.get("refreshToken");
-    console.log(refreshToken);
     const response = await fetch("/api/refreshtoken", {
       method: "POST",
       headers: {
@@ -61,7 +61,7 @@ export default function SelectCity({
     });
     const data = await response.json();
     cookies.set("token", data.accessToken);
-    window.location.href = "/dashboard";
+    redirect("/dashboard");
   }
 
   const fetchCities = async () => {
@@ -137,7 +137,6 @@ export default function SelectCity({
       });
 
       if (response.ok) {
-        console.log("City deleted successfully");
         toast({
           variant: "destructive",
           title: "Success!",

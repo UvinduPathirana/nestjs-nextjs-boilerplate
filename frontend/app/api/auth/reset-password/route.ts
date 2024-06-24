@@ -6,7 +6,6 @@ import { NextRequest, NextResponse } from 'next/server';
 export async function POST(req:
     NextRequest) {
     const { email, password } = await req.json();
-    console.log(email, password, "This is the email and password")
     try {
         const res = await fetch(`${process.env.BACKEND_BASE_URL}/auth/reset`, {
             method: 'POST',

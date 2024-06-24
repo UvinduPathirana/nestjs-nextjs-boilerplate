@@ -11,14 +11,15 @@ interface TempChartProps {
 }
 
 export default function Chart({ data, categories }: TempChartProps) {
-  const chartRef = useRef<any>(null);
+  const chartRef = useRef<HTMLDivElement | null>(null);
+  const c3ChartRef = useRef<any>(null);
 
   useEffect(() => {
     if (!data.length) return;
 
-    if (!chartRef.current) {
-      chartRef.current = c3.generate({
-        bindto: "#chart",
+    if (!c3ChartRef.current) {
+      c3ChartRef.current = c3.generate({
+        bindto: chartRef.current,
         data: {
           columns: [["Temperature", ...data]],
           type: "spline",
@@ -45,7 +46,7 @@ export default function Chart({ data, categories }: TempChartProps) {
         },
       });
     } else {
-      chartRef.current.load({
+      c3ChartRef.current.load({
         columns: [["Temperature", ...data]],
         categories: categories,
       });
@@ -53,19 +54,19 @@ export default function Chart({ data, categories }: TempChartProps) {
   }, [data, categories]);
 
   useEffect(() => {
-    const observer = new MutationObserver(() => {
-      if (chartRef.current) {
-        chartRef.current.flush(); // Redraw the chart
+    return () => {
+      if (c3ChartRef.current) {
+        c3ChartRef.current.destroy();
+        c3ChartRef.current = null;
       }
-    });
-
-    observer.observe(document.documentElement, {
-      attributes: true,
-      attributeFilter: ["class"],
-    });
-
-    return () => observer.disconnect();
+    };
   }, []);
 
-  return <div id="chart" className="w-full h-64 bg-white shadow-lg rounded-lg dark:bg-muted/30"></div>;
+  return (
+    <div
+      ref={chartRef}
+      id="chart"
+      className="w-full h-64 bg-white shadow-lg rounded-lg dark:bg-muted/30"
+    ></div>
+  );
 }
