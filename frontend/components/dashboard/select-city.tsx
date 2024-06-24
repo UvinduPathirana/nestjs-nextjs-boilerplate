@@ -101,7 +101,7 @@ export default function SelectCity({
 
   useEffect(() => {
     fetchCities();
-  }, []);
+  });
 
   useEffect(() => {
     // Ensure a city is always selected when the city list changes
