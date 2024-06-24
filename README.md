@@ -22,13 +22,13 @@ This project is a full-stack weather dashboard application with user authenticat
 2. Install frontend dependencies:
     ```sh
     cd frontend
-    yarn 
+    npm install 
     ```
 
 3. Install backend dependencies:
     ```sh
     cd backend
-    yarn
+    yarn install
     ```
 
 ### Running the Application
@@ -36,13 +36,13 @@ This project is a full-stack weather dashboard application with user authenticat
 1. Start the frontend:
     ```sh
     cd frontend
-    yarn run dev
+    npm run dev
     ```
 
 2. Start the backend:
     ```sh
     cd backend
-    yarn run start
+    yarn start:dev
     ```
 
 ### Development Guidelines
