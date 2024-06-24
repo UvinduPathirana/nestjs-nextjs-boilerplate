@@ -3,8 +3,8 @@ import { cookies } from "next/headers";
 
 export async function POST(req: NextRequest, res: NextResponse) {
     try {
-        const refreshToken = cookies().get("refreshToken");
-    
+        const { refreshToken } = await req.json();
+        
         // Call NestJS backend API to refresh the token
         const response = await fetch(`${process.env.BACKEND_BASE_URL}/auth/refreshtoken`, {
         method: 'POST',
@@ -19,8 +19,6 @@ export async function POST(req: NextRequest, res: NextResponse) {
         return NextResponse.json({ error: errorData.message }, { status: response.status });
         }
         const data = await response.json();
-        cookies().delete("token");
-        cookies().set("token", data.accessToken);
     
         return NextResponse.json({ accessToken: data.accessToken }, { status: 200 });
     } catch (error) {
