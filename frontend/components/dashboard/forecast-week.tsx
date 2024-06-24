@@ -1,5 +1,3 @@
-"use client";
-
 import {
   Card,
   CardContent,
@@ -9,8 +7,6 @@ import {
 } from "@/components/ui/card";
 import { Skeleton } from "@/components/ui/skeleton";
 import Image from "next/image";
-import { useEffect } from "react";
-import { useState } from "react";
 
 interface GeneralWhetherDataProps {
   weather: any;
@@ -21,8 +17,6 @@ export default function ForecastWeek({
   weather,
   loading,
 }: GeneralWhetherDataProps) {
-  const [isFirstRender, setIsFirstRender] = useState(true);
-
   const makeAbsoluteUrl = (url: string) =>
     url.startsWith("//") ? `https:${url}` : url;
 
@@ -37,10 +31,6 @@ export default function ForecastWeek({
     });
   };
 
-  useEffect(() => {
-    setIsFirstRender(false);
-  }, []);
-
   if (loading || !weather) {
     return (
       <Card>
@@ -48,13 +38,11 @@ export default function ForecastWeek({
           <CardTitle>
             <Skeleton className="h-7 w-[100px]" />
           </CardTitle>
-          <CardDescription>
-            <Skeleton className="h-4 w-[230px]" />
-          </CardDescription>
+          <Skeleton className="h-4 w-[230px]" />
         </CardHeader>
         <CardContent>
           <div className="grid gap-4">
-            {Array.from({ length: 3 }).map((_, index) => (
+            {Array.from({ length: 8 }).map((_, index) => (
               <Card key={index} className="flex flex-col items-start gap-4 p-4">
                 <div className="flex w-full items-center justify-between">
                   <div className="flex items-center gap-2">
