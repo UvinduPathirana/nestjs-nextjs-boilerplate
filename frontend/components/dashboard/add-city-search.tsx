@@ -50,7 +50,6 @@ export default function SearchCity() {
       });
 
       if (response.ok) {
-        console.log("City created successfully");
         toast({
           variant: "success",
           title: "Success!",

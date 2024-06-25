@@ -30,9 +30,7 @@ export default function ResetPassword() {
     setIsVerified(true);
   };
 
-  const asyncScriptOnLoad = () => {
-    console.log("Google recaptcha loaded just fine");
-  };
+  const asyncScriptOnLoad = () => {};
 
   const handleEmailChange = (event: any) => {
     setEmail(event.target.value);
@@ -99,7 +97,7 @@ export default function ResetPassword() {
               />
             </div>
             <div className="p-5">
-              <ReCAPTCHA 
+              <ReCAPTCHA
                 ref={recaptchaRef}
                 sitekey="6LeT_vgpAAAAAMPj94VrX5CQv84wNB8Rz1GxOngM"
                 onChange={onChange}

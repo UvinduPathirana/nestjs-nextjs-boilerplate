@@ -26,6 +26,7 @@ import {
 import AddCityDialog from "@/components/dashboard/required-city-dialog";
 import { useCookies } from "next-client-cookies";
 import { revalidatePath } from "next/cache";
+import { redirect } from "next/navigation";
 
 type City = {
   id: string;
@@ -49,9 +50,11 @@ export default function SelectCity({
   const { toast } = useToast();
   const cookies = useCookies();
 
+  // Flag to control the token refresh flow
+  let isRefreshing = false;
+
   async function refreshToken() {
     const refreshToken = cookies.get("refreshToken");
-    console.log(refreshToken);
     const response = await fetch("/api/refreshtoken", {
       method: "POST",
       headers: {
@@ -61,7 +64,8 @@ export default function SelectCity({
     });
     const data = await response.json();
     cookies.set("token", data.accessToken);
-    window.location.href = "/dashboard";
+    isRefreshing = false; // Reset the flag
+    redirect("/dashboard"); // Ensure this does not cause the component to re-mount
   }
 
   const fetchCities = async () => {
@@ -91,8 +95,11 @@ export default function SelectCity({
           title: "Unauthorized request",
           description: "You are not authorized to perform this action.",
         });
-        // cookies.remove("token");
-        refreshToken();
+        if (!isRefreshing) {
+          // Only refresh token if it's not already refreshing
+          isRefreshing = true;
+          await refreshToken();
+        }
       }
     } catch (error) {
       console.error("Error fetching cities:", error);
@@ -101,6 +108,7 @@ export default function SelectCity({
 
   useEffect(() => {
     fetchCities();
+    // Empty dependency array to run only once when component mounts
   }, []);
 
   useEffect(() => {
@@ -137,7 +145,6 @@ export default function SelectCity({
       });
 
       if (response.ok) {
-        console.log("City deleted successfully");
         toast({
           variant: "destructive",
           title: "Success!",
@@ -182,7 +189,8 @@ export default function SelectCity({
           title: "Success!",
           description: "City added successfully.",
         });
-        fetchCities();
+        // Add revalidate without calling fetch cities again
+        revalidatePath("/dashboard");
         setShowAddCityDialog(false);
       } else {
         console.error("Failed to add city");
