@@ -9,7 +9,7 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { Skeleton } from "@/components/ui/skeleton";
-import { ModeToggle } from "@/components/theme-toggle";
+import { ModeToggle } from "@/components/ui/theme-toggle";
 import SelectCity from "@/components/dashboard/select-city";
 import SearchCity from "@/components/dashboard/forms/add-city-search";
 import Profile from "@/components/dashboard/profile";

@@ -9,6 +9,7 @@ import {
   CarouselPrevious,
 } from "@/components/ui/carousel";
 import GeneralWeatherSkeleton from "@/components/skeletons/general-weather-skeleton";
+import HourlyWeatherCarousel from "@/components/weather-components/hourly-weather-carousel";
 
 interface GeneralWhetherDataProps {
   weather: any;
@@ -28,10 +29,6 @@ export default function GeneralWhetherData({
   // Extract hourly data for today
   const today = forecast.forecastday[0];
   const hourlyData = today.hour;
-
-  // Helper function to ensure absolute URLs
-  const makeAbsoluteUrl = (url: string) =>
-    url.startsWith("//") ? `https:${url}` : url;
 
   return (
     <Card className="flex flex-col items-center md:flex-row">
@@ -78,26 +75,7 @@ export default function GeneralWhetherData({
           >
             <CarouselContent className="flex flex-nowrap">
               {hourlyData.map((hour: any, index: number) => (
-                <CarouselItem key={index} style={{ flexBasis: "16.5%" }}>
-                  <div className="p-1">
-                    <Card className="flex flex-col items-center gap-4 p-4 rounded-lg bg-muted">
-                      <CardContent className="flex flex-col items-center justify-center gap-2">
-                        <span className="text-3xl font-bold">
-                          {hour.temp_c}°
-                        </span>
-                        <Image
-                          src={makeAbsoluteUrl(hour.condition.icon)}
-                          alt={hour.condition.text}
-                          width={40}
-                          height={40}
-                        />
-                        <span className="text-gray-500 dark:text-gray-400">
-                          {hour.time.split(" ")[1]}
-                        </span>
-                      </CardContent>
-                    </Card>
-                  </div>
-                </CarouselItem>
+                <HourlyWeatherCarousel key={index} hour={hour} />
               ))}
             </CarouselContent>
             <CarouselPrevious />
