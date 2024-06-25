@@ -12,7 +12,7 @@ export default function ForecastWeekSkeleton() {
       </CardHeader>
       <CardContent>
         <div className="grid gap-4">
-          {Array.from({ length: 8 }).map((_, index) => (
+          {Array.from({ length: 3 }).map((_, index) => (
             <Card key={index} className="flex flex-col items-start gap-4 p-4">
               <div className="flex w-full items-center justify-between">
                 <div className="flex items-center gap-2">

@@ -6,7 +6,6 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import { Skeleton } from "@/components/ui/skeleton";
 import Image from "next/image";
 
 interface GeneralWhetherDataProps {
@@ -40,7 +39,7 @@ export default function ForecastWeek({
     <Card>
       <CardHeader>
         <CardTitle>Forecast</CardTitle>
-        <CardDescription>Weather forecast for the next 7 days</CardDescription>
+        <CardDescription>Weather forecast for the next 3 days</CardDescription>
       </CardHeader>
       <CardContent>
         <div className="grid gap-4">
