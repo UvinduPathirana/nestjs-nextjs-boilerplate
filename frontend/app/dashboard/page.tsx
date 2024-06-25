@@ -9,15 +9,16 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { Skeleton } from "@/components/ui/skeleton";
-import { ModeToggle } from "@/components/theme-toggle";
+import { ModeToggle } from "@/components/ui/theme-toggle";
 import SelectCity from "@/components/dashboard/select-city";
-import SearchCity from "@/components/dashboard/add-city-search";
+import SearchCity from "@/components/dashboard/forms/add-city-search";
 import Profile from "@/components/dashboard/profile";
-import GeneralWhetherData from "@/components/dashboard/general-whether-data";
+import GeneralWhetherData from "@/components/dashboard/widgets/general-whether-data";
 import io from "socket.io-client";
 import { useCookies } from "next-client-cookies";
-import ForecastWeek from "@/components/dashboard/forecast-week";
-import Chart from "@/components/dashboard/chart";
+import ForecastWeek from "@/components/dashboard/widgets/forecast-week";
+import Chart from "@/components/dashboard/widgets/chart";
+import ChartSkeleton from "@/components/skeletons/chart-skeleton";
 
 type City = {
   id: string;
@@ -131,7 +132,7 @@ export default function DashboardPage() {
                 <CardContent>
                   <div style={{ padding: "0px" }}>
                     {loading ? (
-                      <Skeleton className="w-full h-[300px] rounded-lg" />
+                      <ChartSkeleton />
                     ) : (
                       <Chart data={temperatureData} categories={categories} />
                     )}
