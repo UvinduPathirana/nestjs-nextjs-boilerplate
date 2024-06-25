@@ -23,7 +23,7 @@ import {
   AlertDialogTitle,
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
-import AddCityDialog from "@/components/dashboard/required-city-dialog";
+import AddCityDialog from "@/components/dashboard/dialogs/required-city-dialog";
 import { useCookies } from "next-client-cookies";
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
