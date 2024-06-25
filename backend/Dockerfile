@@ -13,8 +13,10 @@ RUN yarn install
 # Copy the rest of the application code to the working directory
 COPY . .
 
+RUN yarn run build
+
 # Expose the port that the NestJS application will run on
 EXPOSE 3000
 
 # Specify the command to run the NestJS application in development mode
-CMD ["yarn", "start:dev"]
+CMD ["yarn", "start"]

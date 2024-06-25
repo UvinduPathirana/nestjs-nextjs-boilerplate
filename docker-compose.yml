@@ -20,7 +20,7 @@ services:
       - WEATHER_API_KEY=${WEATHER_API_KEY}
     depends_on:
       - db
-    command: yarn start:dev
+    command: yarn start
 
   frontend:
     build:
@@ -30,12 +30,11 @@ services:
       - '3002:3002'
     volumes:
       - ./frontend:/usr/src/app
-      - /usr/src/app/node_modules
     environment:
       - BACKEND_BASE_URL=${BACKEND_BASE_URL}
     depends_on:
       - backend
-    command: npm run dev
+    command: npm run start
 
   db:
     image: postgres:13
