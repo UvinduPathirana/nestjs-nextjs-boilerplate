@@ -44,6 +44,24 @@ This project is a full-stack weather dashboard application with user authenticat
     cd backend
     yarn start:dev
     ```
+### Add Env Variables
+#### For Frontend 
+Add a .env file to the /frontend path 
+```
+BACKEND_BASE_URL="http://localhost:3000"
+WEATHER_API_KEY="yourApiKey"
+```
+
+#### For Backend 
+```
+DB_HOST="localhost"
+DB_PORT="5432"
+DB_USERNAME="postgres"
+DB_PASSWORD="db-password"
+DB_NAME="your-database-namae"
+WEATHER_API_KEY="yourApiKey"
+JWT_SECRET="your-secret-key"
+```
 
 ### Development Guidelines
 
